@@ -17,7 +17,7 @@ android {
 
     project.ext {
         CABINET_FABRIC_KEY = project.hasProperty("CABINET_FABRIC_KEY") ? project.CABINET_FABRIC_KEY : "";
-        CABINET_BILLING_KEY = project.hasProperty("CABINET_BILLING_KEY") ? project.CABINET_BILLING_KEY : "";
+        CABINET_BILLING_KEY = project.hasProperty("CABINET_BILLING_KEY") ? project.CABINET_BILLING_KEY : "\"\"";
     }
 
     defaultConfig {
