@@ -79,15 +79,12 @@ import com.afollestad.cabinet.views.ScrimInsetsFrameLayout;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
-import com.crashlytics.android.Crashlytics;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Locale;
-
-import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends CrumbsActivity implements BillingProcessor.IBillingHandler {
 
@@ -329,10 +326,6 @@ public class MainActivity extends CrumbsActivity implements BillingProcessor.IBi
             }
         }
 
-        if (!BuildConfig.DEBUG) {
-            Fabric.with(this, new Crashlytics());
-        }
-
         mToolbar = (Toolbar) findViewById(R.id.appbar_toolbar);
         mToolbar.setSubtitleTextAppearance(this, R.style.DirectoryToolbarTitle);
         mToolbar.setSubtitleTextAppearance(this, R.style.DirectoryToolbarSubtitle);
@@ -423,7 +416,7 @@ public class MainActivity extends CrumbsActivity implements BillingProcessor.IBi
             }
         }
 
-        mBP = new BillingProcessor(this, "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlPBB2hP/R0PrXtK8NPeDX7QV1fvk1hDxPVbIwRZLIgO5l/ZnAOAf8y9Bq57+eO5CD+ZVTgWcAVrS/QsiqDI/MwbfXcDydSkZLJoFofOFXRuSL7mX/jNwZBNtH0UrmcyFx1RqaHIe9KZFONBWLeLBmr47Hvs7dKshAto2Iy0v18kN48NqKxlWtj/PHwk8uIQ4YQeLYiXDCGhfBXYS861guEr3FFUnSLYtIpQ8CiGjwfU60+kjRMmXEGnmhle5lqzj6QeL6m2PNrkbJ0T9w2HM+bR7buHcD8e6tHl2Be6s/j7zn1Ypco/NCbqhtPgCnmLpeYm8EwwTnH4Yei7ACR7mXQIDAQAB", this);
+        mBP = new BillingProcessor(this, BuildConfig.CABINET_BILLING_KEY, this);
         processIntent(getIntent(), savedInstanceState);
     }
 

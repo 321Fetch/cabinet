@@ -11,6 +11,7 @@ import com.afollestad.cabinet.utils.BackgroundThread;
 import com.afollestad.cabinet.utils.StorageUtils;
 import com.afollestad.cabinet.utils.VectorDrawableMap;
 import com.bumptech.glide.Glide;
+import com.crashlytics.android.Crashlytics;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 import com.stericson.RootShell.exceptions.RootDeniedException;
@@ -23,6 +24,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
+
+import io.fabric.sdk.android.Fabric;
 
 /**
  * @author Aidan Follestad (afollestad)
@@ -162,6 +165,9 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        if (!BuildConfig.DEBUG) {
+            Fabric.with(this, new Crashlytics());
+        }
         Glide.get(this).register(LocalFile.class, InputStream.class, new APKIconLoader.Loader());
         mRefWatcher = LeakCanary.install(this);
     }

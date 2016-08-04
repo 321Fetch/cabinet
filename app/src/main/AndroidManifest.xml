@@ -17,6 +17,10 @@
         android:theme="@style/Theme.Cabinet"
         tools:ignore="UnusedAttribute">
 
+        <meta-data
+            android:name="com.crashlytics.ApiKey"
+            android:value="${fabric_key}"/>
+
         <activity
             android:name=".ui.MainActivity"
             android:launchMode="singleTask"
@@ -105,10 +109,6 @@
             android:name=".plugins.PluginDataProvider"
             android:authorities="${applicationId}.plugin_data_store"
             android:exported="false" />
-
-        <meta-data
-            android:name="com.crashlytics.ApiKey"
-            android:value="e9b2b6339277beb481a9c658b72cd0e4c714e0cb" />
 
     </application>
 
