@@ -13,7 +13,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -27,8 +26,6 @@ import com.afollestad.cabinet.ui.MainActivity;
 import com.afollestad.cabinet.utils.Utils;
 import com.afollestad.cabinet.utils.ViewUtils;
 import com.afollestad.cabinet.views.BreadCrumbLayout;
-import com.afollestad.materialdialogs.util.DialogUtils;
-import com.pluscubed.recyclerfastscroll.RecyclerFastScroller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +41,6 @@ public abstract class ContentFragment extends LeakDetectFragment {
     protected GridLayoutManager mLayoutManager;
     protected RecyclerView mRecyclerView;
     protected File mDirectory;
-    private RecyclerFastScroller mFastScroller;
     private boolean mSavedInstanceStateNull;
     private View mEmpty;
 
@@ -259,7 +255,6 @@ public abstract class ContentFragment extends LeakDetectFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recyclerview, container, false);
-        mFastScroller = (RecyclerFastScroller) view.findViewById(R.id.fastScroller);
         mRecyclerView = (RecyclerView) view.findViewById(android.R.id.list);
 
         final MainActivity act = (MainActivity) getActivity();
@@ -270,25 +265,6 @@ public abstract class ContentFragment extends LeakDetectFragment {
                 jumpToTop(false);
             }
         });
-
-        mFastScroller.setRecyclerView(mRecyclerView);
-
-        View.OnTouchListener onTouchListener = new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                mAdapter.stopAnimation();
-                if (getActivity() != null) {
-                    final MainActivity act = (MainActivity) getActivity();
-                    switch (event.getActionMasked()) {
-                        case MotionEvent.ACTION_UP:
-                            act.finishWithAnimation(mRecyclerView, mFastScroller, mEmpty);
-                            break;
-                    }
-                }
-                return false;
-            }
-        };
-        mFastScroller.setOnHandleTouchListener(onTouchListener);
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -321,13 +297,9 @@ public abstract class ContentFragment extends LeakDetectFragment {
             }
         });
 
-        if (getActivity() != null)
-            mFastScroller.setHandlePressedColor(DialogUtils.resolveColor(getActivity(), R.attr.fastscroll_handle_pressed));
-
         mLayoutManager = getNewGridLayoutManager(act);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mRecyclerView.setOnTouchListener(onTouchListener);
         DefaultItemAnimator defaultItemAnimator = new DefaultItemAnimator();
         defaultItemAnimator.setSupportsChangeAnimations(false);
         mRecyclerView.setItemAnimator(defaultItemAnimator);
@@ -364,7 +336,7 @@ public abstract class ContentFragment extends LeakDetectFragment {
                 int overscroll = dy - scrolled;
                 if (overscroll <= 0) {
                     //Top overscroll
-                    act.notifyScroll(dy, false, mRecyclerView, mFastScroller, mEmpty);
+                    act.notifyScroll(dy, false, mRecyclerView, mEmpty);
                 }
                 return scrolled;
             }
@@ -453,7 +425,7 @@ public abstract class ContentFragment extends LeakDetectFragment {
         if (getActivity() != null) {
             MainActivity activity = (MainActivity) getActivity();
             if (activity.appBar != null) {
-                ViewUtils.applyTopPadding(activity.appBar.getHeight(), mRecyclerView, mFastScroller, mEmpty);
+                ViewUtils.applyTopPadding(activity.appBar.getHeight(), mRecyclerView, mEmpty);
                 activity.notifyScroll(0, true);
             }
         }

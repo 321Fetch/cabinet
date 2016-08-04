@@ -32,7 +32,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.view.menu.BaseMenuPresenter;
-import android.support.v7.view.menu.ListMenuItemView;
 import android.support.v7.view.menu.MenuItemImpl;
 import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.ActionMenuView;
@@ -43,15 +42,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.CheckBox;
-import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -82,8 +77,6 @@ import com.afollestad.cabinet.utils.ViewUtils;
 import com.afollestad.cabinet.views.BreadCrumbLayout;
 import com.afollestad.cabinet.views.ScrimInsetsFrameLayout;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.afollestad.materialdialogs.internal.MDTintHelper;
-import com.afollestad.materialdialogs.internal.ThemeSingleton;
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
 import com.crashlytics.android.Crashlytics;
@@ -1060,52 +1053,7 @@ public class MainActivity extends CrumbsActivity implements BillingProcessor.IBi
     }
 
     private void setTintForMenuPopupHelper(MenuPopupHelper menuPopupHelper) {
-        if (menuPopupHelper != null) {
-            final ListView listView = menuPopupHelper.getPopup().getListView();
-            listView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-                    try {
-                        Field checkboxField = ListMenuItemView.class.getDeclaredField("mCheckBox");
-                        checkboxField.setAccessible(true);
-                        Field radioButtonField = ListMenuItemView.class.getDeclaredField("mRadioButton");
-                        radioButtonField.setAccessible(true);
-
-                        for (int i = 0; i < listView.getChildCount(); i++) {
-                            View v = listView.getChildAt(i);
-                            if (!(v instanceof ListMenuItemView)) continue;
-                            ListMenuItemView iv = (ListMenuItemView) v;
-
-
-                            CheckBox check = (CheckBox) checkboxField.get(iv);
-                            if (check != null) {
-                                MDTintHelper.setTint(check, ThemeSingleton.get().widgetColor);
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                    check.setBackground(null);
-                                }
-                            }
-
-
-                            RadioButton radioButton = (RadioButton) radioButtonField.get(iv);
-                            if (radioButton != null) {
-                                MDTintHelper.setTint(radioButton, ThemeSingleton.get().widgetColor);
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                    radioButton.setBackground(null);
-                                }
-                            }
-                        }
-                    } catch (Throwable e) {
-                        e.printStackTrace();
-                    }
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                        listView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    } else {
-                        //noinspection deprecation
-                        listView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                    }
-                }
-            });
-        }
+        //TODO fix
     }
 
     public interface FabListener {
