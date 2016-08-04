@@ -11,6 +11,11 @@ buildscript {
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
+def versionMajor = 1
+def versionMinor = 9
+def versionPatch = 9
+def versionBuild = 0 // bump for dogfood builds, public betas, etc.
+
 android {
     compileSdkVersion 24
     buildToolsVersion "24.0.1"
@@ -24,8 +29,8 @@ android {
         applicationId "us.fetch321.cabinet"
         minSdkVersion 16
         targetSdkVersion 24
-        versionCode 199
-        versionName "1.9.9"
+        versionCode versionMajor * 1000000 + versionMinor * 10000 + versionPatch * 100 + versionBuild
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
         buildConfigField "String", "CABINET_BILLING_KEY", project.ext.CABINET_BILLING_KEY
         manifestPlaceholders = [fabric_key: project.ext.CABINET_FABRIC_KEY]
     }
